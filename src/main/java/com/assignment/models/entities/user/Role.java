@@ -1,16 +1,28 @@
 package com.assignment.models.entities.user;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+/* */
+
+@EqualsAndHashCode
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -51,67 +63,26 @@ public class Role {
     )
     private String image;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    private Set<UserRole> userRoles;
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL/*, fetch=FetchType.LAZY*/)
+    private List<Permission> permissions = new ArrayList<>();
 
-    public Role() {
-    }
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<UserRole> userRoles = new ArrayList<>();
 
-    public Role(long id, String code, String name, String description, String image, Set<UserRole> userRoles) {
+
+    public Role(long id, String code, String name, String description, String image) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.description = description;
         this.image = image;
-        this.userRoles = userRoles;
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
+    
+    public Role(String code, String name, String description, String image) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
         this.image = image;
-    }
-
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
     }
 
 }

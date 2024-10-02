@@ -9,7 +9,6 @@ import com.assignment.validation.annotation.UsernameUnique;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-
 public class UsernameUniqueValidator implements ConstraintValidator<UsernameUnique, String> {
 
     @Autowired
@@ -18,8 +17,8 @@ public class UsernameUniqueValidator implements ConstraintValidator<UsernameUniq
     @Transactional
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        boolean isExist = userRepo.isExistUsername(value);
+        boolean isExist = userRepo.isExistUsernameOrPhone(value); // check if user using phone number as username
         return !isExist;
     }
-    
+
 }

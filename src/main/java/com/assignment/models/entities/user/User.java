@@ -1,17 +1,28 @@
 package com.assignment.models.entities.user;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -42,13 +53,21 @@ public class User {
     )
     private String password;
 
-    // Khai báo trường fullname
+    // Khai báo trường firstname
     @Column(
-            name = "fullname",
+            name = "firstname",
             nullable = false,
-            columnDefinition = "nvarchar(100)"
+            columnDefinition = "nvarchar(50)"
     )
-    private String fullname;
+    private String firstName;
+
+    // Khai báo trường lastname
+    @Column(
+            name = "lastname",
+            nullable = false,
+            columnDefinition = "nvarchar(50)"
+    )
+    private String lastName;
 
     // Khai báo trường email
     @Column(
@@ -81,7 +100,7 @@ public class User {
             name = "birthday",
             nullable = false
     )
-    private LocalDateTime birthday = LocalDateTime.now();
+    private LocalDate birthday = LocalDate.now();
 
     // Khai báo trường status
     @Column(
@@ -158,205 +177,15 @@ public class User {
     )
     private String avatar;
 
-    // liên kết với bảng roles thông qua bảng user_roles (nhiều - nhiều)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserRole> userRoles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<UserDevice> UserDevices = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserLocation> userLocations;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<UserRole> userRoles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<UserPermission> userPermissions;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<UserLocation> userLocations = new ArrayList<>();
 
-    public User() {
-    }
-
-    public User(long id, String username, String password, String fullname, String email, String phone, String gender, String blockReason, String emailVerifiedCode, LocalDateTime emailVerifiedAt, LocalDateTime emailVerifiedExpiredAt, String totpSecretKey, LocalDateTime totpVerifiedAt, String avatar, Set<UserRole> userRoles, Set<UserLocation> userLocations, Set<UserPermission> userPermissions) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-        this.email = email;
-        this.phone = phone;
-        this.gender = gender;
-        this.blockReason = blockReason;
-        this.emailVerifiedCode = emailVerifiedCode;
-        this.emailVerifiedAt = emailVerifiedAt;
-        this.emailVerifiedExpiredAt = emailVerifiedExpiredAt;
-        this.totpSecretKey = totpSecretKey;
-        this.totpVerifiedAt = totpVerifiedAt;
-        this.avatar = avatar;
-        this.userRoles = userRoles;
-        this.userLocations = userLocations;
-        this.userPermissions = userPermissions;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public LocalDateTime getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(LocalDateTime birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getBlockReason() {
-        return blockReason;
-    }
-
-    public void setBlockReason(String blockReason) {
-        this.blockReason = blockReason;
-    }
-
-    public String getEmailVerifiedCode() {
-        return emailVerifiedCode;
-    }
-
-    public void setEmailVerifiedCode(String emailVerifiedCode) {
-        this.emailVerifiedCode = emailVerifiedCode;
-    }
-
-    public LocalDateTime getEmailVerifiedAt() {
-        return emailVerifiedAt;
-    }
-
-    public void setEmailVerifiedAt(LocalDateTime emailVerifiedAt) {
-        this.emailVerifiedAt = emailVerifiedAt;
-    }
-
-    public LocalDateTime getEmailVerifiedExpiredAt() {
-        return emailVerifiedExpiredAt;
-    }
-
-    public void setEmailVerifiedExpiredAt(LocalDateTime emailVerifiedExpiredAt) {
-        this.emailVerifiedExpiredAt = emailVerifiedExpiredAt;
-    }
-
-    public boolean isIsEmailVerified() {
-        return isEmailVerified;
-    }
-
-    public void setIsEmailVerified(boolean isEmailVerified) {
-        this.isEmailVerified = isEmailVerified;
-    }
-
-    public String getTotpSecretKey() {
-        return totpSecretKey;
-    }
-
-    public void setTotpSecretKey(String totpSecretKey) {
-        this.totpSecretKey = totpSecretKey;
-    }
-
-    public LocalDateTime getTotpVerifiedAt() {
-        return totpVerifiedAt;
-    }
-
-    public void setTotpVerifiedAt(LocalDateTime totpVerifiedAt) {
-        this.totpVerifiedAt = totpVerifiedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
-
-    public Set<UserLocation> getUserLocations() {
-        return userLocations;
-    }
-
-    public void setUserLocations(Set<UserLocation> userLocations) {
-        this.userLocations = userLocations;
-    }
-
-    public Set<UserPermission> getUserPermissions() {
-        return userPermissions;
-    }
-
-    public void setUserPermissions(Set<UserPermission> userPermissions) {
-        this.userPermissions = userPermissions;
-    }
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    private List<UserPermission> userPermissions = new ArrayList<>();
 }

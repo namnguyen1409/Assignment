@@ -10,7 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user_roles")
 public class UserRole {
@@ -49,64 +57,4 @@ public class UserRole {
             columnDefinition = "nvarchar(255)"
     )
     private String disabledReason;
-
-    public UserRole() {
-    }
-
-    public UserRole(long id, User user, Role role, String disabledReason) {
-        this.id = id;
-        this.user = user;
-        this.role = role;
-        this.disabledReason = disabledReason;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public boolean isIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getDisabledReason() {
-        return disabledReason;
-    }
-
-    public void setDisabledReason(String disabledReason) {
-        this.disabledReason = disabledReason;
-    }
-
-
 }

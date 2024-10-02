@@ -11,7 +11,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class District {
     @Id
@@ -48,65 +56,4 @@ public class District {
 
     @OneToMany(mappedBy = "district", cascade = CascadeType.ALL)
     private Set<Ward> wards;
-
-    public District() {
-    }
-
-    public District(long id, String name, Province province, double latitude, double longitude, Set<Ward> wards) {
-        this.id = id;
-        this.name = name;
-        this.province = province;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.wards = wards;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Province getProvince() {
-        return province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public Set<Ward> getWards() {
-        return wards;
-    }
-
-    public void setWards(Set<Ward> wards) {
-        this.wards = wards;
-    }
-
 }

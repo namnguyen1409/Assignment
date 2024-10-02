@@ -1,10 +1,13 @@
 package com.assignment.models.repositories.user;
 
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
 import com.assignment.models.entities.user.Role;
 import com.assignment.models.repositories.Repositories;
 
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
 @Transactional
 public class RoleRepo extends Repositories<Role, Long>{
 
@@ -12,5 +15,17 @@ public class RoleRepo extends Repositories<Role, Long>{
     protected Class<Role> getEntityClass() {
         return Role.class;
     }
-    
+
+    public boolean isExistRoleName(String name) {
+        return findUniqueBy("name", name) != null;
+    }
+
+    public boolean isExistRoleCode(String code) {
+        return findUniqueBy("code", code) != null;
+    }
+
+    public Role findByCode(String code) {
+        return findUniqueBy("code", code);
+    }
+
 }

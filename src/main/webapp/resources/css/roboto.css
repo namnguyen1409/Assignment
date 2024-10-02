@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+
+.roboto-serif-thin {
+    font-family: "Roboto Serif", serif;
+    font-weight: 100;
+}
+
+.roboto-serif-light {
+    font-family: "Roboto Serif", serif;
+    font-weight: 300;
+}
+
+.roboto-serif-regular {
+    font-family: "Roboto Serif", serif;
+    font-weight: 400;
+}
+
+.roboto-serif-medium {
+    font-family: "Roboto Serif", serif;
+    font-weight: 500;
+}
+
+.roboto-serif-bold {
+    font-family: "Roboto Serif", serif;
+    font-weight: 700;
+}
+
+.roboto-serif-black {
+    font-family: "Roboto Serif", serif;
+    font-weight: 900;
+}
+
+.roboto-slab-thin {
+    font-family: "Roboto Slab", serif;
+    font-weight: 100;
+}
+
+.roboto-slab-light {
+    font-family: "Roboto Slab", serif;
+    font-weight: 300;
+}
+
+.roboto-slab-regular {
+    font-family: "Roboto Slab", serif;
+    font-weight: 400;
+}
+
+.roboto-slab-medium {
+    font-family: "Roboto Slab", serif;
+    font-weight: 500;
+}
+
+.roboto-slab-bold {
+    font-family: "Roboto Slab", serif;
+    font-weight: 700;
+}
+
+.roboto-slab-black {
+    font-family: "Roboto Slab", serif;
+    font-weight: 900;
+}
+
+.roboto-mono-thin {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 100;
+}
+
+.roboto-mono-light {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 300;
+}
+
+.roboto-mono-regular {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 400;
+}
+
+.roboto-mono-medium {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 500;
+}
+
+.roboto-mono-bold {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 700;
+}
+
+.roboto-mono-black {
+    font-family: "Roboto Mono", monospace;
+    font-weight: 900;
+}
+
+.roboto-flex-thin {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 100;
+}
+
+.roboto-flex-light {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 300;
+}
+
+.roboto-flex-regular {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 400;
+}
+
+.roboto-flex-medium {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 500;
+}
+
+.roboto-flex-bold {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 700;
+}
+
+.roboto-flex-black {
+    font-family: "Roboto Flex", sans-serif;
+    font-weight: 900;
+}
+
+.roboto-condensed-thin {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 100;
+}
+
+.roboto-condensed-light {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 300;
+}
+
+.roboto-condensed-regular {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 400;
+}
+
+.roboto-condensed-medium {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 500;
+}
+
+.roboto-condensed-bold {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 700;
+}
+
+.roboto-condensed-black {
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 900;
+}
+
+.roboto-thin {
+    font-family: "Roboto", sans-serif;
+    font-weight: 100;
+}
+
+.roboto-light {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+}
+
+.roboto-regular {
+    font-family: "Roboto", sans-serif;
+    font-weight: 400;
+}
+
+.roboto-medium {
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+}
+
+.roboto-bold {
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+}
+
+.roboto-black {
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+}

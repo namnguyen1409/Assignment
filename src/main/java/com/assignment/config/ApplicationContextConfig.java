@@ -12,49 +12,98 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.assignment.filter.JwtAuthenticationFilter;
+import com.assignment.service.CustomUserDetailsService;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-/**
- *
- * @author namnguyen
- */
+import jakarta.servlet.ServletContext;
+
 @Configuration
 @ComponentScan(basePackages = "com.assignment")
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class ApplicationContextConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            )
-            .authorizeHttpRequests(authz -> authz
-                .anyRequest().permitAll()
-            ).exceptionHandling(
-                e -> e.accessDeniedPage("/error/403?reason=Truy cập của bạn có thể đến từ form không hợp lệ")
-            );
-
-        return http.build();
+    public CustomUserDetailsService customUserDetailsService() {
+        return new CustomUserDetailsService();
     }
 
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder());
+        return builder.build();
+    }
     
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Use BCrypt for password encoding
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, ServletContext servletContext) throws Exception {
+        http.csrf(csrf -> csrf
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+        )
+                .authorizeHttpRequests(authz -> authz
+                .requestMatchers(new LoggingRequestMatcher()).permitAll()
+                .requestMatchers(
+                    "/error/**", 
+                                "/register/**", 
+                                "/login/**", 
+                                "/api/**", 
+                                "/WEB-INF/views/**", 
+                                "/resources/**",
+                                "/confirm/**"
+                ).permitAll()
+                .anyRequest().authenticated()
+                ).formLogin(
+                        // Customizer.withDefaults()
+                        form -> form.loginPage("/login").permitAll()
+                                .usernameParameter("loginInfo")
+                                .passwordParameter("password")
+                                .defaultSuccessUrl("/home", true)
+                                .failureHandler((request, response, exception) -> {
+                                    // Thiết lập thông báo lỗi trong request
+                                    request.getSession().setAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng!");
+                                    response.sendRedirect("/login?error=true");
+                                })
+                )
+                .oauth2Login(
+                        oauth2 -> oauth2.loginPage("/login").permitAll()
+                )
+                .logout(
+                        logout -> logout.logoutUrl("/logout").permitAll()
+                )
+                .exceptionHandling(e -> e
+                .accessDeniedPage("/error/403?reason=Truy cập của bạn có thể đến từ form không hợp lệ")
+                );
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource bundleMessageSource = new ReloadableResourceBundleMessageSource();
@@ -63,11 +112,6 @@ public class ApplicationContextConfig {
         return bundleMessageSource;
     }
 
-    /**
-     *
-     * Cấu hình kết nối cơ sở dữ liệu SQL Server với HikariCP
-     * @return 
-     */
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
@@ -79,12 +123,6 @@ public class ApplicationContextConfig {
         return new HikariDataSource(config);
     }
 
-    /**
-     *
-     * Cấu hình SessionFactory sử dụng Hibernate với DataSource đã cấu hình ở
-     * trên Sử dụng các entity class trong package com.assignment.model
-     * @return LocalSessionFactoryBean
-     */
     @Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -94,28 +132,15 @@ public class ApplicationContextConfig {
         return sessionFactory;
     }
 
-    /*
-     * Cấu hình các thuộc tính của Hibernate
-     * - SQL Server dialect: dùng để tạo ra các câu lệnh SQL phù hợp với SQL Server
-     * - Show SQL: hiển thị các câu lệnh SQL trong quá trình chạy ứng dụng
-     * - HBM2DDL Auto: tự động tạo bảng dữ liệu dựa trên các entity class
-     */
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
-        hibernateProperties.setProperty("hibernate.show_sql", "true");
+//        hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         return hibernateProperties;
     }
 
-    /*
-     * 
-     * Cấu hình Transaction Manager sử dụng HibernateTransactionManager
-     * Sử dụng SessionFactory đã cấu hình ở trên
-     * -> Quản lý các giao dịch với cơ sở dữ liệu (mở kết nối, commit, rollback,
-     * đóng kết nối)
-     */
     @Bean
     public PlatformTransactionManager transactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();

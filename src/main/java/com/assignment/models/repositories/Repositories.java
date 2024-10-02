@@ -1,6 +1,8 @@
 package com.assignment.models.repositories;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public abstract class Repositories<T, ID> {
+
+    private final StringBuilder defaultQuery = new StringBuilder();
+    private Map<String, Object> params = new HashMap<>();
+    private int index = 0;
 
     // Sử dụng sessionFactory để tạo ra các phiên làm việc với cơ sở dữ liệu
     @Autowired
@@ -39,9 +45,76 @@ public abstract class Repositories<T, ID> {
     }
 
     public T findUniqueBy(String field, Object value) {
+        if (field == null) {
+            return null;
+        }
         return getCurrentSession().createQuery("from " + getEntityClass().getName() + " where " + field + " = :value", getEntityClass())
                 .setParameter("value", value).uniqueResult();
     }
+
+    public T findUniqueBy(Object value, String ...fields) {
+        if (fields == null || fields.length == 0) {
+            throw new IllegalArgumentException("At least one field must be provided");
+        }
+
+        // Tạo truy vấn HQL
+        StringBuilder query = new StringBuilder("from " + getEntityClass().getName() + " where ");
+
+        // Xây dựng điều kiện `or` cho từng trường
+        for (int i = 0; i < fields.length; i++) {
+            query.append(fields[i]).append(" = :value");
+            if (i < fields.length - 1) {
+                query.append(" or ");
+            }
+        }
+
+        // Tạo truy vấn và thiết lập tham số
+        return getCurrentSession().createQuery(query.toString(), getEntityClass())
+                .setParameter("value", value).uniqueResult();
+    }
+
+
+
+    public Repositories<T, ID> CustomQuery() {
+        defaultQuery.setLength(0);
+        params.clear();
+        index = 0;
+        defaultQuery.append("from ").append(getEntityClass().getName());
+        return this;
+    }
+
+    public Repositories<T, ID> where(String field, Object value) {
+        String paramName = "value" + index++;
+        if (index == 1) {
+            defaultQuery.append(" where ").append(field).append(" = :").append(paramName);
+        } else {
+            defaultQuery.append(" and ").append(field).append(" = :").append(paramName);
+        }
+        params.put(paramName, value);
+        return this;
+    }
+
+    public Repositories<T, ID> and(String field, Object value) {
+        return where(field, value);
+    }
+
+    public Repositories<T, ID> or(String field, Object value) {
+        String paramName = "value" + index++;
+        defaultQuery.append(" or ").append(field).append(" = :").append(paramName);
+        params.put(paramName, value);
+        return this;
+    }
+
+    public List<T> getResultList() {
+        return getCurrentSession().createQuery(defaultQuery.toString(), getEntityClass())
+                .setProperties(this.params).list();
+    }
+
+    public T getSingleResult() {
+        return (T) getCurrentSession().createQuery(defaultQuery.toString(), getEntityClass())
+                .setProperties(this.params).uniqueResult();
+    }
+    
 
     // R - Read: lấy thông tin tất cả đối tượng
     public List<T> findAll() {
@@ -74,4 +147,12 @@ public abstract class Repositories<T, ID> {
     
     // Phương thức trừu tượng trả về kiểu dữ liệu của đối tượng
     protected abstract Class<T> getEntityClass();
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
 }

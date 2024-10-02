@@ -8,7 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
+@Data
+@AllArgsConstructor
 @Entity
 @Table(name = "permissons")
 public class Permission {
@@ -50,8 +56,7 @@ public class Permission {
     public Permission() {
     }
 
-    public Permission(long id, String code, String name, String description, String image, Role role) {
-        this.id = id;
+    public Permission(String code, String name, String description, String image, Role role) {
         this.code = code;
         this.name = name;
         this.description = description;
@@ -59,54 +64,10 @@ public class Permission {
         this.role = role;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
+    public Permission(String code, String name, String description, String image) {
         this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
         this.image = image;
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-
-
 }
