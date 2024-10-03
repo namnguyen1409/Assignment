@@ -1,5 +1,6 @@
 package com.assignment.models.entities.user;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +44,12 @@ public class Permission {
     )
     private String description;
 
+    @Column(name = "self_register",
+            nullable = false,
+            columnDefinition = "bit"
+    )
+    private Boolean selfRegister;
+
     @Column(name = "image",
             nullable = false,
             columnDefinition = "nvarchar(255)"
@@ -56,18 +63,15 @@ public class Permission {
     public Permission() {
     }
 
-    public Permission(String code, String name, String description, String image, Role role) {
+    public Permission(String code, String name, String description, Boolean selfRegister, String image, Role role) {
         this.code = code;
         this.name = name;
         this.description = description;
+        this.selfRegister = selfRegister;
         this.image = image;
         this.role = role;
     }
 
-    public Permission(String code, String name, String description, String image) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-        this.image = image;
-    }
+
+    
 }

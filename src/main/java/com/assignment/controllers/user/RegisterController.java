@@ -309,7 +309,6 @@ public class RegisterController {
         if (user.getPhone() == null) {
             return "redirect:/register/phoneemail";
         }
-
         Device device = new Device();
         model.addAttribute("userDevice", device);
         return "user/device";
@@ -336,8 +335,8 @@ public class RegisterController {
         }
         Device find = deviceRepo.findByRegistrationId(getUserDeviceFromRequest(request));
         if (find != null) {
-            // check device is same from database: using some fields such as platform, browser, deviceName
             if (find.isSameDevice(userDevice)) {
+                userDevice.setRegistrationId(find.getRegistrationId());
                 UserDevice ud = new UserDevice();
                 ud.setUser(user);
                 ud.setDevice(find);
@@ -361,7 +360,6 @@ public class RegisterController {
                 return "redirect:/register/complete";
             }
         } else {
-
             deviceRepo.save(userDevice);
             UserDevice userDevice1 = new UserDevice();
             userDevice1.setUser(user);

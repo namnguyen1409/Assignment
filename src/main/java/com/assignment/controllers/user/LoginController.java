@@ -165,7 +165,13 @@ public class LoginController {
         Device find = deviceRepo.findByRegistrationId(getUserDeviceFromRequest(request));
         System.out.println("user: " + user.getTotpSecretKey());
         boolean isDeviceRegistered = (find != null);
-        boolean isDeviceChanged = (find != null && !find.equals(device));
+        boolean isDeviceChanged = (find != null && !find.isSameDevice(device));
+        if(isDeviceRegistered) {
+            System.out.println("Device registered");
+        }
+        if(isDeviceChanged) {
+            System.out.println("Device changed");
+        }
 
         if (isDeviceRegistered) {
             if (user.getTotpSecretKey() == null || !isDeviceChanged) {
@@ -226,6 +232,7 @@ public class LoginController {
         TOTPService totpService = new TOTPService();
         if (totpService.validationTOTP(user.getTotpSecretKey(), otp.getOTP())) {
             pass2fa = true;
+            model.addAttribute("pass2fa", pass2fa);
             return "redirect:/login/success";
         } else {
             model.addAttribute("error", "Mã OTP không chính xác.");

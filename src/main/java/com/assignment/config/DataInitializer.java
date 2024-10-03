@@ -39,34 +39,34 @@ public class DataInitializer  {
             roleRepo.save(new Role("STAFF", "nhân viên", "lorem ipsum", "demo.jpg"));
         }
 
-        // initialize permission data (mua hang, ban hang, nhan tin, )
         Role userRole = roleRepo.findByCode("USER");
+
         if (!permissionRepo.isExistPermissionCode("purchase")) {
-            permissionRepo.save(new Permission("purchase", "mua hàng", "lorem ipsum", "demo.jpg", userRole));
+            permissionRepo.save(new Permission("purchase", "mua hàng", "lorem ipsum", true, "demo.jpg", userRole));
             userRole.getPermissions().add(permissionRepo.findByCode("purchase"));
             roleRepo.update(userRole);
         }
+
         if (!permissionRepo.isExistPermissionCode("sell")) {
-            permissionRepo.save(new Permission("sell", "bán hàng", "lorem ipsum", "demo.jpg", userRole));
+            permissionRepo.save(new Permission("sell", "bán hàng", "lorem ipsum", true, "demo.jpg", userRole));
             userRole.getPermissions().add(permissionRepo.findByCode("sell"));
             roleRepo.update(userRole);
         }
-        // e-wallet
+
         if (!permissionRepo.isExistPermissionCode("ewallet")) {
-            permissionRepo.save(new Permission("ewallet", "Ví điện tử", "lorem ipsum", "demo.jpg", userRole));
+            permissionRepo.save(new Permission("ewallet", "Ví điện tử", "lorem ipsum", true, "demo.jpg", userRole));
             userRole.getPermissions().add(permissionRepo.findByCode("ewallet"));
             roleRepo.update(userRole);
         }
 
-        // delivery
         if (!permissionRepo.isExistPermissionCode("delivery")) {
-            permissionRepo.save(new Permission("delivery", "Giao hàng", "lorem ipsum", "demo.jpg", userRole));
+            permissionRepo.save(new Permission("delivery", "Giao hàng", "lorem ipsum", true, "demo.jpg", userRole));
             userRole.getPermissions().add(permissionRepo.findByCode("delivery"));
             roleRepo.update(userRole);
         }
-        // social media
+
         if (!permissionRepo.isExistPermissionCode("social")) {
-            permissionRepo.save(new Permission("social", "Mạng xã hội", "lorem ipsum", "demo.jpg", userRole));
+            permissionRepo.save(new Permission("social", "Mạng xã hội", "lorem ipsum", true, "demo.jpg", userRole));
             userRole.getPermissions().add(permissionRepo.findByCode("social"));
             roleRepo.update(userRole);
         }

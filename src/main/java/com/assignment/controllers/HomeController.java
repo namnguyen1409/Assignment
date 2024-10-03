@@ -5,6 +5,7 @@
 package com.assignment.controllers;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.assignment.config.PropertiesConfig;
 import com.assignment.security.CustomUserDetails;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,11 +28,23 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 @Controller
 public class HomeController {
 
+    @Autowired
+    private PropertiesConfig prop;
+    
+    
+    private void setCommonAttributes(Model model, String title) {
+        model.addAttribute("compName", prop.COMPANY_NAME);
+        model.addAttribute("compLogo", prop.APP_LOGO);
+        model.addAttribute("title", title);
+    }
+
+
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public String home(
         @AuthenticationPrincipal OAuth2User principal,
         Model model
     ) {
+        setCommonAttributes(model, "Home");
         if (principal != null) {
             String id = principal.getAttribute("sub");
             String name = principal.getAttribute("name");

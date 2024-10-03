@@ -24,7 +24,7 @@
     </noscript>
 
     <h1>Kiểm tra bảo mật</h1>
-    <h3 class="countDown"></h3>
+    <h3 class="countDown">3</h3>
     <h3>Đang thu thập thông tin thiết bị...</h3>
     <br>
     <div class="container">
@@ -60,7 +60,7 @@
         form.canvasFingerprint.value = userDevice.canvasFingerprint;
 
         // countdown then submit form
-        var countDown = 5;
+        var countDown = 3;
         var countDownElement = document.querySelector(".countDown");
         var interval = setInterval(() => {
             countDownElement.innerHTML = countDown;

@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.assignment.models.entities.user.UserPermission;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -37,10 +39,18 @@ public class CustomUserDetails implements UserDetails {
         // Tạo một bản sao của userRoles để tránh ConcurrentModificationException
         List<UserRole> rolesCopy = new ArrayList<>(user.getUserRoles());
         System.out.println("Number of roles: " + rolesCopy.size());
-        List<GrantedAuthority> authorities = rolesCopy.stream()
+        List<GrantedAuthority> roleAuthorities = rolesCopy.stream()
             .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getCode()))
             .collect(Collectors.toList());
-
+        // thêm cả những quyền mà role đó có
+        List<UserPermission> permissionsCopy = new ArrayList<>(user.getUserPermissions());
+        System.out.println("Number of permissions: " + permissionsCopy.size());
+        List<GrantedAuthority> permissionAuthorities = permissionsCopy.stream()
+            .map(userPermission -> new SimpleGrantedAuthority(userPermission.getPermission().getCode()))
+            .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.addAll(roleAuthorities);
+        authorities.addAll(permissionAuthorities);
         if (!authorities.isEmpty()) {
             System.out.println(authorities.get(0).getAuthority());
         } else {

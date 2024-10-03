@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-public class LoginRedirectFilter extends  OncePerRequestFilter {
+public class LoginRedirectFilter extends OncePerRequestFilter {
 
     @SuppressWarnings("null")
     @Override
