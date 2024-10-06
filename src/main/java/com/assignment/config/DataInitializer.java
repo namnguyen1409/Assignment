@@ -1,78 +1,81 @@
 package com.assignment.config;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.assignment.models.entities.user.Permission;
-import com.assignment.models.entities.user.Role;
-import com.assignment.models.repositories.user.PermissionRepo;
-import com.assignment.models.repositories.user.RoleRepo;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @Component
-@Transactional
-public class DataInitializer  {
+public class DataInitializer {
 
     @Autowired
-    private RoleRepo roleRepo;
-
-    @Autowired
-    private PermissionRepo permissionRepo;
+    private DataSource dataSource;
 
     @PostConstruct
+    @Transactional
     public void init() {
-        // initialize role data
-        if (!roleRepo.isExistRoleCode("ADMIN")) {
-            roleRepo.save(new Role("ADMIN", "quản trị viên", "lorem ipsum", "demo.jpg"));
+        try {
+            var path = Paths.get(DataInitializer.class.getClassLoader().getResource("sql/role_permission.sql").toURI());
+            System.out.println("path: " + path.toAbsolutePath());
+        } catch(URISyntaxException e) {
+            System.out.println(e);
         }
-        if (!roleRepo.isExistRoleCode("USER")) {
-            roleRepo.save(new Role("USER", "người dùng", "lorem ipsum", "demo.jpg"));
-        }
-        if (!roleRepo.isExistRoleCode("MANAGER")) {
-            roleRepo.save(new Role("MANAGER", "quản lý", "lorem ipsum", "demo.jpg"));
-        }
-        if (!roleRepo.isExistRoleCode("STAFF")) {
-            roleRepo.save(new Role("STAFF", "nhân viên", "lorem ipsum", "demo.jpg"));
-        }
+        
+        runSqlScript("sql/role_permission.sql");
 
-        Role userRole = roleRepo.findByCode("USER");
-
-        if (!permissionRepo.isExistPermissionCode("purchase")) {
-            permissionRepo.save(new Permission("purchase", "mua hàng", "lorem ipsum", true, "demo.jpg", userRole));
-            userRole.getPermissions().add(permissionRepo.findByCode("purchase"));
-            roleRepo.update(userRole);
-        }
-
-        if (!permissionRepo.isExistPermissionCode("sell")) {
-            permissionRepo.save(new Permission("sell", "bán hàng", "lorem ipsum", true, "demo.jpg", userRole));
-            userRole.getPermissions().add(permissionRepo.findByCode("sell"));
-            roleRepo.update(userRole);
-        }
-
-        if (!permissionRepo.isExistPermissionCode("ewallet")) {
-            permissionRepo.save(new Permission("ewallet", "Ví điện tử", "lorem ipsum", true, "demo.jpg", userRole));
-            userRole.getPermissions().add(permissionRepo.findByCode("ewallet"));
-            roleRepo.update(userRole);
-        }
-
-        if (!permissionRepo.isExistPermissionCode("delivery")) {
-            permissionRepo.save(new Permission("delivery", "Giao hàng", "lorem ipsum", true, "demo.jpg", userRole));
-            userRole.getPermissions().add(permissionRepo.findByCode("delivery"));
-            roleRepo.update(userRole);
-        }
-
-        if (!permissionRepo.isExistPermissionCode("social")) {
-            permissionRepo.save(new Permission("social", "Mạng xã hội", "lorem ipsum", true, "demo.jpg", userRole));
-            userRole.getPermissions().add(permissionRepo.findByCode("social"));
-            roleRepo.update(userRole);
+        // check number of locations
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement();
+             var resultSet = statement.executeQuery("SELECT COUNT(*) FROM provinces")) {
+            resultSet.next();
+            var count = resultSet.getInt(1);
+            if (count == 0) {
+                runSqlScript("sql/address.sql");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking number of locations: " + e.getMessage());
         }
 
     }
 
-
-
+    private void runSqlScript(String scriptPath) {
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement();
+             var reader = new BufferedReader(new InputStreamReader(
+                     getClass().getClassLoader().getResourceAsStream(scriptPath), StandardCharsets.UTF_8))) {
+            
+            String line;
+            var sql = new StringBuilder();
+            
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().equalsIgnoreCase("GO")) {
+                    if (sql.length() > 0) {
+                        statement.execute(sql.toString().trim());
+                        sql.setLength(0);
+                    }
+                } else {
+                    sql.append(line).append("\n"); 
+                }
+            }
+            
+            if (sql.length() > 0) {
+                statement.execute(sql.toString().trim());
+            }
+    
+        } catch (IOException | SQLException e) {
+            System.out.println("Error running SQL script: " + e.getMessage());
+        }
+    }
+    
 }

@@ -53,4 +53,14 @@ public class UserLocation {
         columnDefinition = "nvarchar(255)"
     )
     private String detailAddress;
+
+    public boolean isSame(UserLocation userLocation) {
+        return this.user.getId() == userLocation.getUser().getId()
+            && this.province.getId() == userLocation.getProvince().getId()
+            && this.district.getId() == userLocation.getDistrict().getId()
+            && this.ward.getId() == userLocation.getWard().getId()
+            && this.detailAddress.equals(userLocation.getDetailAddress());
+    }
+
+
 }

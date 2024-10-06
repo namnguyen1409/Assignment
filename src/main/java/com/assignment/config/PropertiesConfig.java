@@ -11,7 +11,8 @@ public class PropertiesConfig {
     public final String JWT_SECRET = "DeDuB9695l2RiYlBSZo1MxiA/bRPGcHmMkLfyOFggs8=";
     public final int JWT_EXPIRATION = 24 * 60 * 60; // 1 day
     public final int REFRESH_TOKEN_EXPIRATION = 4 * 30 * 24 * 60 *60; // 4 months
-    public final String GOOGLE_OAUTH2_URL = "/login/oauth2/code/google";
+    public final String GOOGLE_OAUTH2_URL = "/assignment/oauth2/authorization/google";
+    public final String GITHUB_OAUTH2_URL = "/assignment/oauth2/authorization/github";
     public final String SECRET_KEY = "mpROhWzzhMzdV3Yi7uViTScmRDUKROjHTbOppzf8Gck=";
     public final String COOKIE_DEVICE_ID = "device_id";
 

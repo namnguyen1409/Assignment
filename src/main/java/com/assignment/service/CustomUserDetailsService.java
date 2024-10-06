@@ -33,6 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User with username/phone/email not found: " + identifier);
         }
         Hibernate.initialize(user.getUserRoles());
+        Hibernate.initialize(user.getUserPermissions());
         return new CustomUserDetails(user);
     }
 
@@ -43,6 +44,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User with ID not found: " + id);
         }
         Hibernate.initialize(user.getUserRoles());
+        Hibernate.initialize(user.getUserPermissions());
         return new CustomUserDetails(user);
     }
 
@@ -54,6 +56,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         Hibernate.initialize(userDevice.getUser());
         Hibernate.initialize(userDevice.getUser().getUserRoles());
+        Hibernate.initialize(userDevice.getUser().getUserPermissions());
         return new CustomUserDetails(userDevice.getUser());
     }
 }

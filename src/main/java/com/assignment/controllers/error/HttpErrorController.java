@@ -21,5 +21,14 @@ public class HttpErrorController {
         return "error/403";
     }
 
-
+    @RequestMapping("/404")
+    public String notFound(
+        @RequestParam(name = "reason", required = false) String reasonParam,
+        @RequestAttribute(name = "reason", required = false) String reasonAttr,
+        Model model
+    ) {
+        String reason = reasonParam != null ? reasonParam : reasonAttr;
+        model.addAttribute("reason", reason);
+        return "error/404";
+    }
 }

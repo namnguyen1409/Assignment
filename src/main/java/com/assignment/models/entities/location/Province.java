@@ -1,6 +1,11 @@
 package com.assignment.models.entities.location;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -15,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @EqualsAndHashCode
 @Data
 @NoArgsConstructor
@@ -35,7 +41,9 @@ public class Province {
     )
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
-    private Set<District> districts;
+    private List<District> districts = new ArrayList<>();
+
 
 }

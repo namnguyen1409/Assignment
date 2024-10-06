@@ -38,7 +38,7 @@
                     Chào mừng bạn đến với trang chủ của chúng tôi. Chúng tôi hy vọng bạn sẽ có những trải nghiệm tuyệt vời tại đây. Nếu bạn cần bất kỳ sự trợ giúp nào, đừng ngần ngại liên hệ với chúng tôi.
                 </p>
                 <p class="lead animate__animated animate__heartBeat" style="--animate-duration: 2s;">
-                    <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">
+                    <a href="role" class="btn btn-lg btn-secondary fw-bold border-white bg-white">
                         Tiếp tục <i class="bi bi-arrow-right"></i>
                     </a>
                 </p>

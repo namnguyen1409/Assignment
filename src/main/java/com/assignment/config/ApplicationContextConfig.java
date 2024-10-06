@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import com.assignment.filter.JwtAuthenticationFilter;
 import com.assignment.service.CustomUserDetailsService;
@@ -38,6 +42,11 @@ import jakarta.servlet.ServletContext;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class ApplicationContextConfig {
+
+    @Bean
+    public MultipartResolver multipartResolver() {
+        return new StandardServletMultipartResolver();
+    }
 
     @Bean
     public CustomUserDetailsService customUserDetailsService() {
@@ -55,23 +64,23 @@ public class ApplicationContextConfig {
         builder.userDetailsService(customUserDetailsService()).passwordEncoder(passwordEncoder());
         return builder.build();
     }
-    
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ServletContext servletContext) throws Exception {
         http.csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         )
                 .authorizeHttpRequests(authz -> authz
                 .requestMatchers(new LoggingRequestMatcher()).permitAll()
                 .requestMatchers(
-                    "/error/**", 
-                                "/register/**", 
-                                "/login/**", 
-                                "/api/**", 
-                                "/WEB-INF/views/**", 
-                                "/resources/**",
-                                "/confirm/**"
+                        "/error/**",
+                        "/register/**",
+                        "/login/**",
+                        "/api/**",
+                        "/WEB-INF/views/**",
+                        "/resources/**",
+                        "/confirm/**"
                 ).permitAll()
                 .anyRequest().authenticated()
                 ).formLogin(
@@ -79,7 +88,6 @@ public class ApplicationContextConfig {
                         form -> form.loginPage("/login").permitAll()
                                 .usernameParameter("loginInfo")
                                 .passwordParameter("password")
-                                .defaultSuccessUrl("/home", true)
                                 .failureHandler((request, response, exception) -> {
                                     // Thiết lập thông báo lỗi trong request
                                     request.getSession().setAttribute("errorMessage", "Tên đăng nhập hoặc mật khẩu không đúng!");
@@ -136,6 +144,7 @@ public class ApplicationContextConfig {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
 //        hibernateProperties.setProperty("hibernate.show_sql", "true");
+        hibernateProperties.setProperty("hibernate.transaction.coordinator_class", "jdbc");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         return hibernateProperties;
@@ -146,6 +155,24 @@ public class ApplicationContextConfig {
         HibernateTransactionManager hibernateTransactionManager = new HibernateTransactionManager();
         hibernateTransactionManager.setSessionFactory(sessionFactory);
         return hibernateTransactionManager;
+    }
+
+    @Bean
+    public JavaMailSender mailSender() {
+        JavaMailSenderImpl mailSenderImpl = new JavaMailSenderImpl();
+        mailSenderImpl.setHost("smtp.gmail.com");
+        mailSenderImpl.setPort(465);
+        mailSenderImpl.setProtocol("smtps");
+        mailSenderImpl.setDefaultEncoding("UTF-8");
+        mailSenderImpl.setUsername("allconnectemail@gmail.com");
+        mailSenderImpl.setPassword("bpoj irgx svhc xizh");
+
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.smtp.ssl.enable", "true");
+        mailSenderImpl.setJavaMailProperties(javaMailProperties);
+
+        return mailSenderImpl;
     }
 
 }

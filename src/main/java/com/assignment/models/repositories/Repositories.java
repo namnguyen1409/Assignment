@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /*
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @param <ID> : kiểu dữ liệu của khóa chính
  */
 @Repository
-@Transactional
 public abstract class Repositories<T, ID> {
 
     private final StringBuilder defaultQuery = new StringBuilder();
@@ -82,7 +80,37 @@ public abstract class Repositories<T, ID> {
         defaultQuery.append("from ").append(getEntityClass().getName());
         return this;
     }
+    
 
+    public Repositories<T, ID> CustomQuery(String alias) {
+        defaultQuery.setLength(0);
+        params.clear();
+        index = 0;
+        defaultQuery.append("from ").append(getEntityClass().getName()).append(" ").append(alias);
+        return this;
+    }
+
+
+    // Fetch dữ liệu từ các bảng liên kết
+    public Repositories<T, ID> fetch(String associationPath) {
+        if (defaultQuery.length() == 0) {
+            throw new IllegalStateException("CustomQuery() must be called before fetch()");
+        }
+        defaultQuery.append(" left join fetch ").append(associationPath);
+        return this;
+    }
+
+    public Repositories<T, ID> fetch(String... associationPaths) {
+        if (defaultQuery.length() == 0) {
+            throw new IllegalStateException("CustomQuery() must be called before fetch()");
+        }
+        for (String associationPath : associationPaths) {
+            defaultQuery.append(" left join fetch ").append(associationPath);
+        }
+        return this;
+    }
+    
+    
     public Repositories<T, ID> where(String field, Object value) {
         String paramName = "value" + index++;
         if (index == 1) {
@@ -93,17 +121,18 @@ public abstract class Repositories<T, ID> {
         params.put(paramName, value);
         return this;
     }
-
+    
     public Repositories<T, ID> and(String field, Object value) {
         return where(field, value);
     }
-
+    
     public Repositories<T, ID> or(String field, Object value) {
         String paramName = "value" + index++;
         defaultQuery.append(" or ").append(field).append(" = :").append(paramName);
         params.put(paramName, value);
         return this;
     }
+    
 
     public List<T> getResultList() {
         return getCurrentSession().createQuery(defaultQuery.toString(), getEntityClass())
