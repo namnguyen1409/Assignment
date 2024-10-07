@@ -38,12 +38,6 @@ public class UserDevice {
     @Column(name = "last_login")
     private LocalDate lastLogin;
 
-    @Column(name = "token")
-    private String token;
-
-    @Column(name = "token_expires")
-    private LocalDate tokenExpires;
-
     @Column(name = "revoked")
     private Boolean revoked = false;
 

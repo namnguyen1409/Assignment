@@ -35,7 +35,8 @@
                                         </div>
 
                                         <a href="${googleOAuth2Url}" class="btn btn-outline-danger btn-sm btn-block">
-                                            <i class="bi bi-google"></i></a>
+                                            <i class="bi bi-google"></i>
+                                        </a>
                                         <div class="divider d-flex align-items-center my-4">
                                             <hr class="flex-grow-1">
                                             <p class="text-center fw-bold mx-3 mb-0">Hoặc</p>
@@ -62,15 +63,11 @@
                                             </div>
                                  
                                             <div class="text-center pt-1 mb-5 pb-1 row mt-3">
-                                             <div class="d-flex justify-content-between col-12">
+                                             <div class="d-flex flex-wrap justify-content-between col-12">
                                                 <button id="submitBtn" data-mdb-button-init data-mdb-ripple-init class="btn col-12 col-md-5 btn-lg btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">Đăng nhập</button>
                                                 <a href="<c:url value="/" />register" data-mdb-button-init data-mdb-ripple-init class="btn col-12 col-md-5 btn-lg btn-outline-danger btn-block fa-lg mb-3">Đăng ký</a>
                                             </div>
                                             </div>
-
-                                            <%-- <div class="d-grid mt-3">
-                                                <a href="${googleOAuth2Url}" class="btn btn-outline-primary btn-lg">Đăng ký</a>
-                                            </div> --%>
                                         </form:form>
                                     </div>
                                 </div>

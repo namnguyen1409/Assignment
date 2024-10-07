@@ -68,6 +68,18 @@ public class UserRepo extends Repositories<User, Long> {
         .getSingleResult();
     }
 
+    public User getUserWithDevices(Long userId) {
+        return CustomQuery("u").fetch("u.userDevices")
+        .where("u.id", userId)
+        .getSingleResult();
+    }
+
+    public User getUserWithPermissions(Long userId) {
+        return CustomQuery("u").fetch("u.userPermissions")
+        .where("u.id", userId)
+        .getSingleResult();
+    }
+
 
 
 }

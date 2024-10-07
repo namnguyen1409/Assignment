@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.assignment.config.PropertiesConfig;
-import com.assignment.models.dto.user.RoleDTO;
-import com.assignment.models.dto.user.SimpleUserDTO;
+import com.assignment.models.dto.setting.RoleDTO;
+import com.assignment.models.dto.setting.SimpleUserDTO;
 import com.assignment.models.entities.user.User;
 import com.assignment.security.CustomUserDetails;
 
@@ -33,7 +33,6 @@ public class RoleController {
         if (user.getUserRoles().size() == 1) {
             return "redirect:/" + user.getUserRoles().get(0).getRole().getCode().toLowerCase();
         }
-
         List<RoleDTO> roles = user.getUserRoles().stream().map(ur -> new RoleDTO(
             ur.getRole().getCode(),
             ur.getRole().getName(),

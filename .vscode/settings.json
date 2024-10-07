@@ -3,5 +3,9 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "emmet.includeLanguages": {
         "jsp": "html"
-    }
+    },
+    // hiden folder target
+    "files.exclude": {
+        "**/target": true
+    },
 }
