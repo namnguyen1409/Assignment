@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.entities.user.UserLocation;
+import com.assignment.models.entities.auth.UserLocation;
 import com.assignment.models.repositories.Repositories;
 
 @Repository

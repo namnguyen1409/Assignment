@@ -2,7 +2,7 @@ package com.assignment.models.repositories.user;
 
 import org.springframework.stereotype.Repository;
 
-import com.assignment.models.entities.user.Role;
+import com.assignment.models.entities.auth.Role;
 import com.assignment.models.repositories.Repositories;
 
 import org.springframework.transaction.annotation.Transactional;

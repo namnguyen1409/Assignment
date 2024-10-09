@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.assignment.config.PropertiesConfig;
 import com.assignment.models.dto.setting.RoleDTO;
 import com.assignment.models.dto.setting.SimpleUserDTO;
-import com.assignment.models.entities.user.User;
+import com.assignment.models.entities.auth.User;
 import com.assignment.security.CustomUserDetails;
 
 @Controller

@@ -3,9 +3,9 @@ package com.assignment.models.repositories.user;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.entities.user.Device;
-import com.assignment.models.entities.user.User;
-import com.assignment.models.entities.user.UserDevice;
+import com.assignment.models.entities.auth.Device;
+import com.assignment.models.entities.auth.User;
+import com.assignment.models.entities.auth.UserDevice;
 import com.assignment.models.repositories.Repositories;
 
 @Repository

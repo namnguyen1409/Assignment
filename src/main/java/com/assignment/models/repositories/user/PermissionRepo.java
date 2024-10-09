@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.assignment.models.entities.user.Permission;
+import com.assignment.models.entities.auth.Permission;
+import com.assignment.models.entities.auth.Role;
 import com.assignment.models.repositories.Repositories;
 
 import org.springframework.transaction.annotation.Transactional;
-
-import com.assignment.models.entities.user.Role;
 
 
 @Repository

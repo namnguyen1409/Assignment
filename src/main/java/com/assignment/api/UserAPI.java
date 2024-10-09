@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.assignment.models.entities.user.User;
+import com.assignment.models.entities.auth.User;
 import com.assignment.models.repositories.user.UserRepo;
 
 import jakarta.mail.MessagingException;

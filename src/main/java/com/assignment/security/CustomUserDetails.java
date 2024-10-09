@@ -12,9 +12,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.entities.user.User;
-import com.assignment.models.entities.user.UserPermission;
-import com.assignment.models.entities.user.UserRole;
+import com.assignment.models.entities.auth.User;
+import com.assignment.models.entities.auth.UserPermission;
+import com.assignment.models.entities.auth.UserRole;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

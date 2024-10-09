@@ -8,8 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.entities.user.User;
-import com.assignment.models.entities.user.UserDevice;
+import com.assignment.models.entities.auth.User;
+import com.assignment.models.entities.auth.UserDevice;
 import com.assignment.models.repositories.user.UserDeviceRepo;
 import com.assignment.models.repositories.user.UserRepo;
 import com.assignment.security.CustomUserDetails;

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.entities.user.User;
+import com.assignment.models.entities.auth.User;
 import com.assignment.models.repositories.Repositories;
 
 
