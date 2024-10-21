@@ -27,4 +27,7 @@
   <script src="<c:url value="/resources/js/bootstrap.bundle.min.js" />"></script>
   <script src="<c:url value="/resources/js/setting.js" />"></script>
   <script src="<c:url value="/resources/js/address.js" />"></script>
+  <script src="<c:url value="/resources/js/placeholder.min.js" />"></script>
+  <script src="<c:url value="/resources/js/respond.min.js" />"></script>
+
 </html>

@@ -14,7 +14,7 @@ public class PartialFileHash {
         try (var is = file.getInputStream()) {
             byte[] buffer = new byte[8192]; // set buffer size to 8KB
             int read; // read length
-            while ((read = is.read(buffer)) > 0) { 
+            while ((read = is.read(buffer)) > 0) {
                 digest.update(buffer, 0, read);
             }
         } catch (Exception e) {

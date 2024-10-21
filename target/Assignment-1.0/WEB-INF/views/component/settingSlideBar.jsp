@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<div class="d-none d-xl-block col-md-5 col-xl-4 d-flex flex-column flex-shrink-0 p-3 bg-light">
+<div class="d-none d-xl-block col-md-5 col-xl-3 d-flex flex-column flex-shrink-0 p-3 bg-light">
     <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <i class="bi bi-gear ms-2 me-2 fs-4"></i>
         <span class="fs-4">Cài đặt</span>

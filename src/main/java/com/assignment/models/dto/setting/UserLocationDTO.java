@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserLocationDTO {
-    private Long provinceID;
-    private Long districtID;
-    private Long wardID;
+    private Long provinceId;
+    private Long districtId;
+    private Long wardId;
     private String detailAddress;
 }

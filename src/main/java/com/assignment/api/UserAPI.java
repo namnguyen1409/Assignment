@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.assignment.models.entities.auth.User;
-import com.assignment.models.repositories.user.UserRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -71,5 +71,6 @@ public class UserAPI {
         }
     }
 
+    
     
 }

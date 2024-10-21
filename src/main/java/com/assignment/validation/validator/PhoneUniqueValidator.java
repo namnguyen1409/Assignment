@@ -3,7 +3,7 @@ package com.assignment.validation.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.assignment.models.repositories.user.UserRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 import com.assignment.validation.annotation.PhoneUnique;
 
 import jakarta.validation.ConstraintValidator;

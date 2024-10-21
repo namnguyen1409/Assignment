@@ -36,7 +36,7 @@ public class LocationAPI {
     }
 
     @GetMapping("/districts/{provinceId}")
-    public ResponseEntity<?> getDistrictsByProvinceId(@PathVariable Long provinceId) {
+    public ResponseEntity<?> getDistrictsByProvinceId(@PathVariable("provinceId") Long provinceId) {
         Province province = provinceRepo.findById(provinceId);
         if (province == null) {
             return ResponseEntity.notFound().build();
@@ -45,13 +45,12 @@ public class LocationAPI {
     }
 
     @GetMapping("/wards/{districtId}")
-    public ResponseEntity<?> getWardsByDistrictId(@PathVariable Long districtId) {
+    public ResponseEntity<?> getWardsByDistrictId(@PathVariable("districtId") Long districtId) {
         District district = districtRepo.findById(districtId);
         if (district == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(wardRepo.findAllByDistrict(district));
     }
-
 
 }

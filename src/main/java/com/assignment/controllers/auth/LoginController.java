@@ -25,9 +25,9 @@ import com.assignment.models.dto.auth.login.LoginData;
 import com.assignment.models.entities.auth.Device;
 import com.assignment.models.entities.auth.User;
 import com.assignment.models.entities.auth.UserDevice;
-import com.assignment.models.repositories.user.DeviceRepo;
-import com.assignment.models.repositories.user.UserDeviceRepo;
-import com.assignment.models.repositories.user.UserRepo;
+import com.assignment.models.repositories.auth.DeviceRepo;
+import com.assignment.models.repositories.auth.UserDeviceRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 import com.assignment.security.CustomUserDetails;
 import com.assignment.security.EncryptionUtil;
 import com.assignment.security.JwtTokenProvider;
@@ -374,20 +374,20 @@ public class LoginController {
             userDevice = new UserDevice();
             userDevice.setUser(user);
             userDevice.setDevice(device);
-            userDevice.setLastLogin(LocalDate.now());
+            userDevice.setLastLogin(LocalDateTime.now());
         } else {
             if (find.isSameDevice(device)) {
                 System.out.println("Device not changed");
                 device.setRegistrationId(find.getRegistrationId());
                 userDevice = userDeviceRepo.findByUserAndDevice(user, find);
-                userDevice.setLastLogin(LocalDate.now());
+                userDevice.setLastLogin(LocalDateTime.now());
             } else {
                 System.out.println("Device changed");
                 deviceRepo.save(device);
                 userDevice = new UserDevice();
                 userDevice.setUser(user);
                 userDevice.setDevice(device);
-                userDevice.setLastLogin(LocalDate.now());
+                userDevice.setLastLogin(LocalDateTime.now());
             }
         }
         // nếu người dùng chọn ghi nhớ đăng nhập
@@ -405,7 +405,7 @@ public class LoginController {
             refreshTokenCookie.setPath("/");
             response.addCookie(refreshTokenCookie);
             userDevice.setRefreshToken(refreshTokenProvider.getKeyFromRefreshToken(refreshToken));
-            userDevice.setRefreshTokenExpires(LocalDate.now().plusDays(prop.REFRESH_TOKEN_EXPIRATION / 86400));
+            userDevice.setRefreshTokenExpires(LocalDateTime.now().plusDays(prop.REFRESH_TOKEN_EXPIRATION / 86400));
         } else {
             String jwt = tokenProvider.generateToken(new CustomUserDetails(user));
             Cookie jwtCookie = new Cookie("jwtToken", jwt);

@@ -14,9 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageUploadService {
 
-    @Autowired 
+    @Autowired
     private PartialFileHash partialFileHash;
- 
 
     public String storeImage(MultipartFile image, String path) {
         if (image == null) {
@@ -45,14 +44,13 @@ public class ImageUploadService {
             image.transferTo(newFile);
             return newFilename;
         } catch (IOException | NoSuchAlgorithmException ex) {
-            throw new IllegalArgumentException("Lỗi lưu hình ảnh");
+            throw new IllegalArgumentException(ex.getMessage());
         }
 
     }
 
-
     public boolean hasValidImageExtension(String filename) {
-        String[] validExtensions = { "jpg", "jpeg", "png", "gif", "bmp", "webp"};
+        String[] validExtensions = { "jpg", "jpeg", "png", "gif", "bmp", "webp" };
         String fileExtension = FilenameUtils.getExtension(filename).toLowerCase();
         return Arrays.asList(validExtensions).contains(fileExtension);
     }
@@ -63,5 +61,4 @@ public class ImageUploadService {
         return mimeType.startsWith("image/");
     }
 
-    
 }

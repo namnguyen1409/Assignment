@@ -39,7 +39,9 @@ public class Category {
     @Column(name = "name", nullable = false, columnDefinition = "nvarchar(255)")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
 
@@ -49,5 +51,26 @@ public class Category {
     // danh sách sản phẩm thuộc danh mục
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
+
+
+    @Column(name = "image", columnDefinition = "nvarchar(255)")
+    private String image = "default.png";
+    
+    public CategoryDTO toDTO() {
+        List<CategoryDTO> childDTOs = new ArrayList<>();
+        for (Category child : children) {
+            childDTOs.add(child.toDTO());
+        }
+        return new CategoryDTO(this.id, this.name, childDTOs);
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class CategoryDTO {
+        private Long id;
+        private String name;
+        private List<CategoryDTO> children;
+    }
     
 }

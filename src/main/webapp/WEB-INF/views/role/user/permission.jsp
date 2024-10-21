@@ -4,14 +4,6 @@
 
 <div class="container">
     <h1 class="text-center">Chọn tính năng bạn muốn dùng</h1>
-    <%-- private String code;
-    private String name;
-    private String description;
-    private Boolean selfRegister;
-    private String image;
-    private Boolean isActive;
-    private Boolean hasPermission;
-    private String disabledReason; --%>
     <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
         <c:forEach items="${permissions}" var="permission">
             <div class="col-sm-12 col-md-6 col-lg-4">
@@ -38,8 +30,6 @@
             </div>
         </c:forEach>
     </div>
-
-
 </div>
 
 

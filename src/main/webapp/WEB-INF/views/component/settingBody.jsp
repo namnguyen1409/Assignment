@@ -2,7 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
-<div class="col-lg-12 col-md-12 col-xl-8 bg-light p-3">
+<div class="col-lg-12 col-md-12 col-xl-9 bg-light p-3">
     <c:choose>
         <c:when test="${tab eq 'general'}">
             <%-- header --%>
@@ -182,31 +182,31 @@
                 <%-- province --%>
                 <div class="mb-3">
                     <label for="province" class="form-label h6">Tỉnh/Thành phố</label>
-                    <form:select path="provinceID" class="form-select" required="true">
+                    <form:select path="provinceId" class="form-select" required="true">
                         <form:option value="">Chọn tỉnh/thành phố</form:option>
                         <form:options items="${provinces}" itemValue="id" itemLabel="name" />
                     </form:select>
-                    <form:errors path="provinceID" cssClass="text-danger" />
+                    <form:errors path="provinceId" cssClass="text-danger" />
                 </div>
 
                 <%-- district --%>
                 <div class="mb-3">
                     <label for="district" class="form-label h6">Quận/Huyện</label>
-                    <form:select path="districtID" class="form-select" required="true">
+                    <form:select path="districtId" class="form-select" required="true">
                         <form:option value="">Chọn quận/huyện</form:option>
 
                     </form:select>
-                    <form:errors path="districtID" cssClass="text-danger" />
+                    <form:errors path="districtId" cssClass="text-danger" />
                 </div>
 
                 <%-- ward --%>
                 <div class="mb-3">
                     <label for="ward" class="form-label h6">Phường/Xã</label>
-                    <form:select path="wardID" class="form-select" required="true">
+                    <form:select path="wardId" class="form-select" required="true">
                         <form:option value="">Chọn phường/xã</form:option>
 
                     </form:select>
-                    <form:errors path="wardID" cssClass="text-danger" />
+                    <form:errors path="wardId" cssClass="text-danger" />
                 </div>
 
                 <%-- detail address --%>
@@ -247,31 +247,31 @@
                 <%-- province --%>
                 <div class="mb-3">
                     <label for="province" class="form-label h6">Tỉnh/Thành phố</label>
-                    <form:select path="provinceID" class="form-select" required="true">
+                    <form:select path="provinceId" class="form-select" required="true">
                         <form:option value="">Chọn tỉnh/thành phố</form:option>
                         <form:options items="${provinces}" itemValue="id" itemLabel="name" />
                     </form:select>
-                    <form:errors path="provinceID" cssClass="text-danger" />
+                    <form:errors path="provinceId" cssClass="text-danger" />
                 </div>
 
                 <%-- district --%>
                 <div class="mb-3">
                     <label for="district" class="form-label h6">Quận/Huyện</label>
-                    <form:select path="districtID" class="form-select" required="true">
+                    <form:select path="districtId" class="form-select" required="true">
                         <form:option value="">Chọn quận/huyện</form:option>
                         <form:options items="${districts}" itemValue="id" itemLabel="name" />
                     </form:select>
-                    <form:errors path="districtID" cssClass="text-danger" />
+                    <form:errors path="districtId" cssClass="text-danger" />
                 </div>
 
                 <%-- ward --%>
                 <div class="mb-3">
                     <label for="ward" class="form-label h6">Phường/Xã</label>
-                    <form:select path="wardID" class="form-select" required="true">
+                    <form:select path="wardId" class="form-select" required="true">
                         <form:option value="">Chọn phường/xã</form:option>
                         <form:options items="${wards}" itemValue="id" itemLabel="name" />
                     </form:select>
-                    <form:errors path="wardID" cssClass="text-danger" />
+                    <form:errors path="wardId" cssClass="text-danger" />
                 </div>
 
                 <%-- detail address --%>

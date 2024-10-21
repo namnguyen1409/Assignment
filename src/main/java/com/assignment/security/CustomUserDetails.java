@@ -36,13 +36,11 @@ public class CustomUserDetails implements UserDetails {
 
         // Tạo một bản sao của userRoles để tránh ConcurrentModificationException
         List<UserRole> rolesCopy = new ArrayList<>(user.getUserRoles());
-        System.out.println("Number of roles: " + rolesCopy.size());
         List<GrantedAuthority> roleAuthorities = rolesCopy.stream()
                 .map(userRole -> new SimpleGrantedAuthority("ROLE_" + userRole.getRole().getCode()))
                 .collect(Collectors.toList());
         // thêm cả những quyền mà role đó có
         List<UserPermission> permissionsCopy = new ArrayList<>(user.getUserPermissions());
-        System.out.println("Number of permissions: " + permissionsCopy.size());
         List<GrantedAuthority> permissionAuthorities = permissionsCopy.stream()
                 .map(userPermission -> new SimpleGrantedAuthority(userPermission.getPermission().getCode()))
                 .collect(Collectors.toList());

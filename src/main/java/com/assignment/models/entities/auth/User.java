@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.assignment.models.entities.ewallet.Ewallet;
+import com.assignment.models.entities.shop.cart.Cart;
+import com.assignment.models.entities.shop.order.Order;
 import com.assignment.models.entities.shop.product.ProductLike;
 import com.assignment.models.entities.shop.product.ProductRating;
 import com.assignment.models.entities.shop.product.ProductReport;
@@ -27,7 +30,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"userDevices", "userRoles", "userLocations", "userPermissions", "store", "searchHistories", "orders", "productViews", "productLikes", "productRatings", "productShares", "productReports", "cart"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -131,9 +134,15 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Store store;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<SearchHistory> searchHistories = new ArrayList<>();
+
     /*
      * Kết nối với những bảng của nhóm shop
      */
+    // Kết nối với bảng orders: 1 user có nhiều đơn hàng
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
 
     // Kết nối với bảng product_view: 1 user có nhiều lượt xem
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -154,5 +163,13 @@ public class User {
     // Kết nối với bảng product_report: 1 user có nhiều báo cáo
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductReport> productReports = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Cart cart;
+
+    // kết nối với e-wallet
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Ewallet ewallet;
+
 
 }

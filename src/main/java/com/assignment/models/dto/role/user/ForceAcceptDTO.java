@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ForceAcceptDTO {
-
     @AssertTrue(message = "Bạn phải chấp nhận điều khoản để sử dụng dịch vụ")
     private Boolean accept = false;
 
-    
 }

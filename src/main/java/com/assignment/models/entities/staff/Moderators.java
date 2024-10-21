@@ -1,6 +1,5 @@
 package com.assignment.models.entities.staff;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.assignment.models.entities.auth.User;
@@ -40,8 +39,8 @@ public class Moderators {
     @JoinColumn(name = "salary")
     private Double salary;
     
-    // kiểm duyệt report: 1 kiểm duyệt - nhiều report
-    @OneToMany(mappedBy = "Moderators", cascade= CascadeType.ALL, fetch= FetchType.LAZY)
-    private List<ProductReport> productReports = new ArrayList<>();
+    // danh sách các báo cáo sản phẩm
+    @OneToMany(mappedBy = "moderator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductReport> productReports;
     
 }

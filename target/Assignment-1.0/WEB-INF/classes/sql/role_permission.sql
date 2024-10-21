@@ -13,7 +13,7 @@ END
 IF NOT EXISTS (SELECT * FROM roles WHERE Code = 'MANAGER')
 BEGIN
     INSERT INTO roles (Code, Name, Description, Image) 
-    VALUES ('MANAGER', N'quản lý', 'lorem ipsum', 'demo.jpg');
+    VALUES ('MANAGER', N'quản lý', 'lorre', 'demo.jpg');
 END
 
 

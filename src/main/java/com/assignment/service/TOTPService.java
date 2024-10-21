@@ -26,9 +26,8 @@ public class TOTPService {
 
     public String generateQRCodeURL(String secretKey, String accountName, String issuer) {
         return String.format(
-            "otpauth://totp/%s:%s?secret=%s&issuer=%s",
-            issuer, accountName, secretKey, issuer
-        );
+                "otpauth://totp/%s:%s?secret=%s&issuer=%s",
+                issuer, accountName, secretKey, issuer);
     }
 
     public String generateSecretKey() {
@@ -42,7 +41,7 @@ public class TOTPService {
         Base32 base32 = new Base32();
         return base32.decode(secret);
     }
-    
+
     public boolean validationTOTP(String secret, String code) {
         try {
             byte[] decodedKey = decodeSecretKey(secret);

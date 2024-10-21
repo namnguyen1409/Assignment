@@ -68,7 +68,7 @@ public class ApplicationContextConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ServletContext servletContext) throws Exception {
         http.csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**")
+                // .ignoringRequestMatchers("/api/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         )
                 .authorizeHttpRequests(authz -> authz
@@ -143,7 +143,7 @@ public class ApplicationContextConfig {
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
-//        hibernateProperties.setProperty("hibernate.show_sql", "true");
+        // hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.transaction.coordinator_class", "jdbc");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");

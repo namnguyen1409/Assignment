@@ -2,7 +2,7 @@ package com.assignment.validation.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.assignment.models.repositories.user.UserRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 import com.assignment.validation.annotation.UserInfoExist;
 
 import org.springframework.transaction.annotation.Transactional;

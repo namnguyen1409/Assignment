@@ -1,14 +1,11 @@
 package com.assignment.models.repositories;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 
 /*
  * 
@@ -18,10 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public abstract class Repositories<T, ID> {
-
-    private final StringBuilder defaultQuery = new StringBuilder();
-    private Map<String, Object> params = new HashMap<>();
-    private int index = 0;
 
     // Sử dụng sessionFactory để tạo ra các phiên làm việc với cơ sở dữ liệu
     @Autowired
@@ -46,11 +39,12 @@ public abstract class Repositories<T, ID> {
         if (field == null) {
             return null;
         }
-        return getCurrentSession().createQuery("from " + getEntityClass().getName() + " where " + field + " = :value", getEntityClass())
+        return getCurrentSession()
+                .createQuery("from " + getEntityClass().getName() + " where " + field + " = :value", getEntityClass())
                 .setParameter("value", value).uniqueResult();
     }
 
-    public T findUniqueBy(Object value, String ...fields) {
+    public T findUniqueBy(Object value, String... fields) {
         if (fields == null || fields.length == 0) {
             throw new IllegalArgumentException("At least one field must be provided");
         }
@@ -65,85 +59,48 @@ public abstract class Repositories<T, ID> {
                 query.append(" or ");
             }
         }
-
         // Tạo truy vấn và thiết lập tham số
         return getCurrentSession().createQuery(query.toString(), getEntityClass())
                 .setParameter("value", value).uniqueResult();
     }
 
-
-
-    public Repositories<T, ID> CustomQuery() {
-        defaultQuery.setLength(0);
-        params.clear();
-        index = 0;
-        defaultQuery.append("from ").append(getEntityClass().getName());
-        return this;
-    }
-    
-
-    public Repositories<T, ID> CustomQuery(String alias) {
-        defaultQuery.setLength(0);
-        params.clear();
-        index = 0;
-        defaultQuery.append("from ").append(getEntityClass().getName()).append(" ").append(alias);
-        return this;
+    public List<T> getResultList(
+            QueryBuilder<T> queryBuilder) {
+        return getCurrentSession().createQuery(queryBuilder.build(), getEntityClass())
+                .setProperties(queryBuilder.getParams()).list();
     }
 
-
-    // Fetch dữ liệu từ các bảng liên kết
-    public Repositories<T, ID> fetch(String associationPath) {
-        if (defaultQuery.length() == 0) {
-            throw new IllegalStateException("CustomQuery() must be called before fetch()");
-        }
-        defaultQuery.append(" left join fetch ").append(associationPath);
-        return this;
+    // lấy theo trang
+    public List<T> getResultList(int page, int limit, QueryBuilder<T> queryBuilder) {
+        return getCurrentSession().createQuery(queryBuilder.build(), getEntityClass())
+                .setProperties(queryBuilder.getParams()).setFirstResult((page - 1) * limit).setMaxResults(limit).list();
     }
 
-    public Repositories<T, ID> fetch(String... associationPaths) {
-        if (defaultQuery.length() == 0) {
-            throw new IllegalStateException("CustomQuery() must be called before fetch()");
-        }
-        for (String associationPath : associationPaths) {
-            defaultQuery.append(" left join fetch ").append(associationPath);
-        }
-        return this;
-    }
-    
-    
-    public Repositories<T, ID> where(String field, Object value) {
-        String paramName = "value" + index++;
-        if (index == 1) {
-            defaultQuery.append(" where ").append(field).append(" = :").append(paramName);
-        } else {
-            defaultQuery.append(" and ").append(field).append(" = :").append(paramName);
-        }
-        params.put(paramName, value);
-        return this;
-    }
-    
-    public Repositories<T, ID> and(String field, Object value) {
-        return where(field, value);
-    }
-    
-    public Repositories<T, ID> or(String field, Object value) {
-        String paramName = "value" + index++;
-        defaultQuery.append(" or ").append(field).append(" = :").append(paramName);
-        params.put(paramName, value);
-        return this;
-    }
-    
-
-    public List<T> getResultList() {
-        return getCurrentSession().createQuery(defaultQuery.toString(), getEntityClass())
-                .setProperties(this.params).list();
+    public T getSingleResult(QueryBuilder<T> queryBuilder) {
+        return (T) getCurrentSession().createQuery(queryBuilder.build(), getEntityClass())
+                .setProperties(queryBuilder.getParams()).uniqueResult();
     }
 
-    public T getSingleResult() {
-        return (T) getCurrentSession().createQuery(defaultQuery.toString(), getEntityClass())
-                .setProperties(this.params).uniqueResult();
+    public Long count(QueryBuilder<T> queryBuilder) {
+        Long result =  getCurrentSession()
+                .createQuery(queryBuilder.build(), Long.class)
+                .setProperties(queryBuilder.getParams())
+                .uniqueResult();
+        return result == null ? 0 : result;
     }
-    
+
+    public Double avg(QueryBuilder<T> queryBuilder) {
+        Double result = getCurrentSession().createQuery(queryBuilder.build(), Double.class)
+                .setProperties(queryBuilder.getParams()).uniqueResult();
+        return result == null ? 0 : result;
+    }
+
+    public void executeUpdate(QueryBuilder<T> queryBuilder) {
+        getCurrentSession().createMutationQuery(queryBuilder.build())
+                .setProperties(queryBuilder.getParams()).executeUpdate();
+    }
+
+
 
     // R - Read: lấy thông tin tất cả đối tượng
     public List<T> findAll() {
@@ -151,10 +108,10 @@ public abstract class Repositories<T, ID> {
     }
 
     public List<T> findAllBy(String field, Object value) {
-        return getCurrentSession().createQuery("from " + getEntityClass().getName() + " where " + field + " = :value", getEntityClass())
+        return getCurrentSession()
+                .createQuery("from " + getEntityClass().getName() + " where " + field + " = :value", getEntityClass())
                 .setParameter("value", value).list();
     }
-
 
     // U - Update: cập nhật một đối tượng
     public void update(T entity) {
@@ -173,15 +130,8 @@ public abstract class Repositories<T, ID> {
             delete(entity);
         }
     }
-    
+
     // Phương thức trừu tượng trả về kiểu dữ liệu của đối tượng
     protected abstract Class<T> getEntityClass();
 
-    public Map<String, Object> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
-    }
 }

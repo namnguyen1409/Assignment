@@ -46,6 +46,31 @@ public class DataInitializer {
         } catch (SQLException e) {
             System.out.println("Error checking number of locations: " + e.getMessage());
         }
+        // check number of categories
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement();
+             var resultSet = statement.executeQuery("SELECT COUNT(*) FROM categories")) {
+            resultSet.next();
+            var count = resultSet.getInt(1);
+            if (count == 0) {
+                runSqlScript("sql/categories.sql");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking number of categories: " + e.getMessage());
+        }
+
+        // check number of bank
+        try (var connection = dataSource.getConnection();
+             var statement = connection.createStatement();
+             var resultSet = statement.executeQuery("SELECT COUNT(*) FROM bank")) {
+            resultSet.next();
+            var count = resultSet.getInt(1);
+            if (count == 0) {
+                runSqlScript("sql/bank.sql");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking number of bank: " + e.getMessage());
+        }
 
     }
 

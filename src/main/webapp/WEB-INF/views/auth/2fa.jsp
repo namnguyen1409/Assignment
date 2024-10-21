@@ -20,14 +20,14 @@
                 <div> <span>Mã xác minh được tạo trong ứng dụng xác thực bạn đã thiết lập trước đó</div>
                 <div class="text-danger text-center mt-2"> ${error} </div>
                 <div id="otpDiv" class="inputs d-flex flex-row justify-content-center mt-2"> 
-                    <form:input type="number" path="first" maxlength="1" class="m-2 text-center form-control rounded" />
-                    <form:input type="number" path="second" maxlength="1" class="m-2 text-center form-control rounded" />
-                    <form:input type="number" path="third" maxlength="1" class="m-2 text-center form-control rounded" />
-                    <form:input type="number" path="fourth" maxlength="1" class="m-2 text-center form-control rounded" />
-                    <form:input type="number" path="fifth" maxlength="1" class="m-2 text-center form-control rounded" />
-                    <form:input type="number" path="sixth" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="first" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="second" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="third" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="fourth" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="fifth" maxlength="1" class="m-2 text-center form-control rounded" />
+                    <form:input type="password" path="sixth" maxlength="1" class="m-2 text-center form-control rounded" />
                 </div>
-                <div class="mt-4"> <button type="submit" class="btn btn-danger px-4 validate">Validate</button> </div>
+                <div class="mt-4"> <button type="submit" class="btn btn-danger px-4 validate">Tiếp tục</button> </div>
             </form:form>
         </div>
     </div>

@@ -1,6 +1,6 @@
 package com.assignment.models.dto.setting;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ public class DeviceDTO {
     private String deviceName;
     private String platform;
     private String browser;
-    private LocalDate lastLogin;
+    private LocalDateTime lastLogin;
     private Boolean isRevoked;
     private Boolean isCurrentDevice;
 }

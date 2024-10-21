@@ -1,5 +1,6 @@
 package com.assignment.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,16 @@ import com.assignment.models.dto.setting.TOTPEnableDTO;
 import com.assignment.models.dto.setting.UserLocationDTO;
 import com.assignment.models.entities.auth.User;
 import com.assignment.models.entities.auth.UserLocation;
+import com.assignment.models.repositories.auth.UserLocationRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 import com.assignment.models.repositories.location.DistrictRepo;
 import com.assignment.models.repositories.location.ProvinceRepo;
 import com.assignment.models.repositories.location.WardRepo;
-import com.assignment.models.repositories.user.UserLocationRepo;
-import com.assignment.models.repositories.user.UserRepo;
 import com.assignment.security.CustomUserDetails;
 import com.assignment.security.EncryptionUtil;
 import com.assignment.service.QRCodeService;
 import com.assignment.service.TOTPService;
+import com.google.zxing.WriterException;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -77,18 +79,19 @@ public class SettingController {
     }
 
     private User getUser() {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
         return userDetails.getUser();
     }
 
     @GetMapping(value = {
-        "",
-        "/general"
+            "",
+            "/general"
     })
     public String general(
-            Model model
-    ) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Model model) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
         GeneralUserDTO userDTO = new GeneralUserDTO(
                 userDetails.getUser().getUsername(),
                 userDetails.getUser().getFirstName(),
@@ -96,8 +99,7 @@ public class SettingController {
                 userDetails.getUser().getGender(),
                 userDetails.getUser().getBirthday(),
                 userDetails.getUser().getCreatedAt(),
-                userDetails.getUser().getAvatar()
-        );
+                userDetails.getUser().getAvatar());
         addProperties(model);
         SimpleUserDTO simpleUserDTO = new SimpleUserDTO(userDTO.getUsername(), userDTO.getAvatar());
         model.addAttribute("simpUser", simpleUserDTO);
@@ -107,14 +109,14 @@ public class SettingController {
     }
 
     @PostMapping(value = {
-        "",
-        "/general"
+            "",
+            "/general"
     })
     public String generalPost(
             Model model,
-            @ModelAttribute("general") GeneralUserDTO userDTO
-    ) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            @ModelAttribute("general") GeneralUserDTO userDTO) {
+        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
         userDetails.getUser().setAvatar(userDTO.getAvatar());
         userRepo.update(userDetails.getUser());
         return "redirect:/setting/general";
@@ -122,15 +124,13 @@ public class SettingController {
 
     @GetMapping("/contact")
     public String contact(
-            Model model
-    ) {
+            Model model) {
 
         User user = getUser();
         ContactUserDTO contactDTO = new ContactUserDTO(
                 user.getEmail(),
                 user.getPhone(),
-                user.getEmailVerifiedAt()
-        );
+                user.getEmailVerifiedAt());
         addProperties(model);
         SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user.getUsername(), user.getAvatar());
         model.addAttribute("simpUser", simpleUserDTO);
@@ -142,8 +142,7 @@ public class SettingController {
     @GetMapping("/address")
     @Transactional
     public String address(
-            Model model
-    ) {
+            Model model) {
         addProperties(model);
         User user = userRepo.getUserWithLocations(getUser().getId());
         List<UserLocation> listLocations = user.getUserLocations();
@@ -156,12 +155,12 @@ public class SettingController {
 
     @GetMapping("/address/add")
     public String addressAdd(
-            Model model
-    ) {
+            Model model) {
         addProperties(model);
         SimpleUserDTO simpleUserDTO = new SimpleUserDTO(getUser().getUsername(), getUser().getAvatar());
         UserLocationDTO userLocationDTO = new UserLocationDTO();
-        List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
+        List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName()))
+                .toList();
         model.addAttribute("provinces", provinces);
         model.addAttribute("location", userLocationDTO);
         model.addAttribute("simpUser", simpleUserDTO);
@@ -173,14 +172,13 @@ public class SettingController {
     public String addressAddPost(
             Model model,
             @ModelAttribute("location") @Validated UserLocationDTO userLocationDTO,
-            BindingResult bindingResult
-    ) {
+            BindingResult bindingResult) {
         User user = userRepo.getUserWithLocations(getUser().getId());
         List<UserLocation> listLocations = user.getUserLocations();
         UserLocation userLocation = new UserLocation();
-        userLocation.setProvince(provinceRepo.findById(userLocationDTO.getProvinceID()));
-        userLocation.setDistrict(districtRepo.findById(userLocationDTO.getDistrictID()));
-        userLocation.setWard(wardRepo.findById(userLocationDTO.getWardID()));
+        userLocation.setProvince(provinceRepo.findById(userLocationDTO.getProvinceId()));
+        userLocation.setDistrict(districtRepo.findById(userLocationDTO.getDistrictId()));
+        userLocation.setWard(wardRepo.findById(userLocationDTO.getWardId()));
         userLocation.setDetailAddress(userLocationDTO.getDetailAddress());
         userLocation.setUser(user);
 
@@ -191,7 +189,8 @@ public class SettingController {
         if (bindingResult.hasErrors()) {
             addProperties(model);
             SimpleUserDTO simpleUserDTO = new SimpleUserDTO(getUser().getUsername(), getUser().getAvatar());
-            List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
+            List<ProvinceDTO> provinces = provinceRepo.findAll().stream()
+                    .map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
             model.addAttribute("provinces", provinces);
             model.addAttribute("location", userLocationDTO);
             model.addAttribute("simpUser", simpleUserDTO);
@@ -205,8 +204,7 @@ public class SettingController {
     @GetMapping("/address/edit/{id}")
     public String addressEdit(
             Model model,
-            @PathVariable("id") Long id
-    ) {
+            @PathVariable("id") Long id) {
         addProperties(model);
         UserLocation userLocation = userLocationRepo.findByIdWithFetch(id);
         User user = getUser();
@@ -219,13 +217,16 @@ public class SettingController {
                 userLocation.getProvince().getId(),
                 userLocation.getDistrict().getId(),
                 userLocation.getWard().getId(),
-                userLocation.getDetailAddress()
-        );
+                userLocation.getDetailAddress());
 
-        List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
-        List<DistrictDTO> districts = districtRepo.findAllByProvince(userLocation.getProvince()).stream().map(d -> new DistrictDTO(d.getId(), d.getName())).toList();
-        List<WardDTO> wards = wardRepo.findAllByDistrict(userLocation.getDistrict()).stream().map(w -> new WardDTO(w.getId(), w.getName())).toList();
-        String fullAddress = userLocation.getDetailAddress() + ", " + userLocation.getWard().getName() + ", " + userLocation.getDistrict().getName() + ", " + userLocation.getProvince().getName();
+        List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName()))
+                .toList();
+        List<DistrictDTO> districts = districtRepo.findAllByProvince(userLocation.getProvince()).stream()
+                .map(d -> new DistrictDTO(d.getId(), d.getName())).toList();
+        List<WardDTO> wards = wardRepo.findAllByDistrict(userLocation.getDistrict()).stream()
+                .map(w -> new WardDTO(w.getId(), w.getName())).toList();
+        String fullAddress = userLocation.getDetailAddress() + ", " + userLocation.getWard().getName() + ", "
+                + userLocation.getDistrict().getName() + ", " + userLocation.getProvince().getName();
         model.addAttribute("fullAddress", fullAddress);
         model.addAttribute("current", userLocation);
         model.addAttribute("provinces", provinces);
@@ -242,28 +243,32 @@ public class SettingController {
             Model model,
             @PathVariable("id") Long id,
             @ModelAttribute("location") @Validated UserLocationDTO userLocationDTO,
-            BindingResult bindingResult
-    ) {
+            BindingResult bindingResult) {
         UserLocation userLocation = userLocationRepo.findByIdWithFetch(id);
         User user = userRepo.getUserWithLocations(getUser().getId());
         if (userLocation == null || userLocation.getUser().getId() != user.getId()) {
             return "redirect:/setting/address";
         }
-        userLocation.setProvince(provinceRepo.findById(userLocationDTO.getProvinceID()));
-        userLocation.setDistrict(districtRepo.findById(userLocationDTO.getDistrictID()));
-        userLocation.setWard(wardRepo.findById(userLocationDTO.getWardID()));
+        userLocation.setProvince(provinceRepo.findById(userLocationDTO.getProvinceId()));
+        userLocation.setDistrict(districtRepo.findById(userLocationDTO.getDistrictId()));
+        userLocation.setWard(wardRepo.findById(userLocationDTO.getWardId()));
         userLocation.setDetailAddress(userLocationDTO.getDetailAddress());
         // check if the location already exists
-        if (user.getUserLocations().stream().anyMatch(ul -> ul.isSame(userLocation) && ul.getId() != userLocation.getId())) {
+        if (user.getUserLocations().stream()
+                .anyMatch(ul -> ul.isSame(userLocation) && ul.getId() != userLocation.getId())) {
             bindingResult.rejectValue("detailAddress", "error.detailAddress", "Địa chỉ này đã tồn tại.");
         }
         if (bindingResult.hasErrors()) {
             addProperties(model);
             SimpleUserDTO simpleUserDTO = new SimpleUserDTO(user.getUsername(), user.getAvatar());
-            List<ProvinceDTO> provinces = provinceRepo.findAll().stream().map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
-            List<DistrictDTO> districts = districtRepo.findAllByProvince(userLocation.getProvince()).stream().map(d -> new DistrictDTO(d.getId(), d.getName())).toList();
-            List<WardDTO> wards = wardRepo.findAllByDistrict(userLocation.getDistrict()).stream().map(w -> new WardDTO(w.getId(), w.getName())).toList();
-            String fullAddress = userLocation.getDetailAddress() + ", " + userLocation.getWard().getName() + ", " + userLocation.getDistrict().getName() + ", " + userLocation.getProvince().getName();
+            List<ProvinceDTO> provinces = provinceRepo.findAll().stream()
+                    .map(p -> new ProvinceDTO(p.getId(), p.getName())).toList();
+            List<DistrictDTO> districts = districtRepo.findAllByProvince(userLocation.getProvince()).stream()
+                    .map(d -> new DistrictDTO(d.getId(), d.getName())).toList();
+            List<WardDTO> wards = wardRepo.findAllByDistrict(userLocation.getDistrict()).stream()
+                    .map(w -> new WardDTO(w.getId(), w.getName())).toList();
+            String fullAddress = userLocation.getDetailAddress() + ", " + userLocation.getWard().getName() + ", "
+                    + userLocation.getDistrict().getName() + ", " + userLocation.getProvince().getName();
             model.addAttribute("fullAddress", fullAddress);
             model.addAttribute("current", userLocation);
             model.addAttribute("provinces", provinces);
@@ -280,8 +285,7 @@ public class SettingController {
 
     @GetMapping("/address/delete/{id}")
     public String addressDelete(
-            @PathVariable("id") Long id
-    ) {
+            @PathVariable("id") Long id) {
         UserLocation userLocation = userLocationRepo.findByIdWithFetch(id);
         User user = getUser();
         if (userLocation != null && userLocation.getUser().getId() == user.getId()) {
@@ -293,8 +297,7 @@ public class SettingController {
     @GetMapping("/security")
     public String security(
             Model model,
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         addProperties(model);
         User user = userRepo.getUserWithDevices(getUser().getId());
 
@@ -317,9 +320,8 @@ public class SettingController {
                                 ud.getDevice().getBrowser(),
                                 ud.getLastLogin(),
                                 ud.getRevoked(),
-                                ud.getDevice().getRegistrationId().equals(regId)
-                        )
-                ).toList();
+                                ud.getDevice().getRegistrationId().equals(regId)))
+                .toList();
         model.addAttribute("devices", devices);
         model.addAttribute("simpUser", simpleUserDTO);
         model.addAttribute("tab", "security");
@@ -330,8 +332,7 @@ public class SettingController {
     public String securityPost(
             Model model,
             @ModelAttribute("changePass") @Validated ChangePassDTO changePassDTO,
-            BindingResult bindingResult
-    ) {
+            BindingResult bindingResult) {
         User user = getUser();
         System.out.println(changePassDTO.getTOTP());
         if (user.getTotpSecretKey() != null) {
@@ -341,7 +342,7 @@ public class SettingController {
             } else {
                 bindingResult.rejectValue("TOTP", "error.TOTP", "Mã xác thực không hợp lệ.");
             }
-        } 
+        }
         if (!user.getPassword().equals(passwordEncoder.encode(changePassDTO.getOldPassword()))) {
             bindingResult.rejectValue("oldPassword", "error.oldPassword", "Mật khẩu cũ không đúng.");
         }
@@ -363,8 +364,7 @@ public class SettingController {
 
     @GetMapping("/security/enableTOTP")
     public String enableTOTP(
-            Model model
-    ) {
+            Model model) {
         addProperties(model);
         User user = getUser();
         if (user.getTotpSecretKey() != null) {
@@ -385,7 +385,7 @@ public class SettingController {
             model.addAttribute("totp", totpEnableDTO);
             model.addAttribute("tab", "enableTOTP");
             return "setting";
-        } catch (Exception e) {
+        } catch (WriterException | IOException e) {
             return "redirect:/setting/security";
         }
 
@@ -395,8 +395,7 @@ public class SettingController {
     public String enableTOTPPost(
             Model model,
             @ModelAttribute("totp") @Validated TOTPEnableDTO totpEnableDTO,
-            BindingResult bindingResult
-    ) {
+            BindingResult bindingResult) {
         User user = getUser();
         if (user.getTotpSecretKey() != null) {
             return "redirect:/setting/security";
@@ -416,7 +415,6 @@ public class SettingController {
         userRepo.update(user);
         return "redirect:/setting/security";
     }
-
 
     private String getUserDeviceFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();

@@ -17,22 +17,37 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = "productVariants")
 @Table(name = "sizes")
 public class Size {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "nvarchar(255)")
     private String name; // Ví dụ: S, M, L, XL
 
     // kết nối với bảng variant
     @OneToMany(mappedBy = "size")
     private List<ProductVariant> productVariants;
+
+    public SizeDTO toDTO() {
+        return new SizeDTO(this.id, this.name);
+    }
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class SizeDTO {
+        private Long id;
+        private String name;
+    }
 }

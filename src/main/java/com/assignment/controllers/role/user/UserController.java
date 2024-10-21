@@ -17,9 +17,9 @@ import com.assignment.models.dto.setting.SimpleUserDTO;
 import com.assignment.models.entities.auth.Permission;
 import com.assignment.models.entities.auth.Role;
 import com.assignment.models.entities.auth.User;
-import com.assignment.models.repositories.user.UserRepo;
-import com.assignment.models.repositories.user.PermissionRepo;
-import com.assignment.models.repositories.user.RoleRepo;
+import com.assignment.models.repositories.auth.PermissionRepo;
+import com.assignment.models.repositories.auth.RoleRepo;
+import com.assignment.models.repositories.auth.UserRepo;
 import com.assignment.security.CustomUserDetails;
 import java.util.ArrayList;
 

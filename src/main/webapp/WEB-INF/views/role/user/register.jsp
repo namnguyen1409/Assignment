@@ -6,6 +6,12 @@
         <c:if test="${tab eq 'purchase'}">
             <%@ include file="/WEB-INF/views/component/user/purchase.jsp" %>
         </c:if>
+        <c:if test="${tab eq 'sell'}">
+            <%@ include file="/WEB-INF/views/component/user/sell.jsp" %>
+        </c:if>
+        <c:if test="${tab eq 'ewallet'}">
+            <%@ include file="/WEB-INF/views/component/user/ewallet.jsp" %>
+        </c:if>
     </div>
 </div>
 

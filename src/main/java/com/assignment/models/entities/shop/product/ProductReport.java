@@ -59,10 +59,10 @@ public class ProductReport {
     @JoinColumn(name = "process_at")
     private LocalDateTime processAt = null;
 
-    // người xử lý báo cáo
     @ManyToOne
-    @JoinColumn(name = "process_by")
-    private Moderators processBy = null; 
+    @JoinColumn(name = "moderator_id")
+    private Moderators moderator;
+    
 
     // nội dung xử lý báo cáo
     @JoinColumn(name = "process_content")

@@ -1,4 +1,4 @@
-const baseHref = document.getElementsByTagName("base")[0].href;
+
 
 const context = Object.freeze({
     primary: "primary",
@@ -46,11 +46,15 @@ function uploadAvatar(file) {
     const formData = new FormData();
     formData.append("file", file);
     const url = baseHref + "api/upload/image/avatar";
-
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
     // get url of uploaded file (text response)
     return fetch(url, {
         method: "POST",
-        body: formData
+        body: formData,
+        headers: {
+            [csrfHeader]: csrfToken
+        }
     }).then(response => response.json())
     .then(data => data.fileName);
 }

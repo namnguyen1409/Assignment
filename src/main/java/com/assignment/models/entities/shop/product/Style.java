@@ -17,19 +17,21 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString(exclude = "productVariants")
 @Table(name = "styles")
-class Style {
+public class Style {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, columnDefinition = "nvarchar(255)")
     private String name;
 
     @Column(name = "image", nullable = false)
@@ -38,5 +40,19 @@ class Style {
     // kêt nối với bảng variant
     @OneToMany(mappedBy = "style")
     private List<ProductVariant> productVariants;
+
+    public StyleDTO toDTO() {
+        return new StyleDTO(this.id, this.name, this.image);
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class StyleDTO {
+        private Long id;
+        private String name;
+        private String image;
+    }
+
 
 }

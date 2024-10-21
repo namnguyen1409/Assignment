@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_rating_images")
-class ProductRatingImage {
+public class ProductRatingImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

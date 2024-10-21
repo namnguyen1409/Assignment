@@ -1,6 +1,6 @@
 package com.assignment.models.entities.auth;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +36,7 @@ public class UserDevice {
     private Device device;
 
     @Column(name = "last_login")
-    private LocalDate lastLogin;
+    private LocalDateTime lastLogin;
 
     @Column(name = "revoked")
     private Boolean revoked = false;
@@ -45,6 +45,6 @@ public class UserDevice {
     private String refreshToken;
 
     @Column(name = "refresh_token_expires")
-    private LocalDate refreshTokenExpires;
+    private LocalDateTime refreshTokenExpires;
 
 }

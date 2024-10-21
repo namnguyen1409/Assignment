@@ -49,8 +49,11 @@
             <p class="text-danger">* 
                 Bằng việc bạn tick vào ô bên dưới, bạn đã đồng ý với các điều khoản sử dụng dịch vụ mua hàng của chúng tôi
             </p>
-            <form:checkbox path="accept" cssClass="form-check-input"/>
-            <form:label path="accept" cssClass="form-check" for="accept">Tôi đồng ý với các điều khoản sử dụng dịch vụ mua hàng</form:label>
+            <div class="form-check">
+                <form:checkbox path="accept" cssClass="form-check-input"/>
+                <form:label path="accept" cssClass="form-check" for="accept">Tôi đồng ý với các điều khoản sử dụng dịch vụ mua hàng</form:label>
+                <form:errors path="accept" cssClass="text-danger"/>
+            </div>
             <button type="submit" class="btn btn-primary mt-3">Đăng ký</button>
         </form:form>
     </div>
